@@ -1,54 +1,61 @@
 ---
 
-- name: set fact java_state to present
-  set_fact: java_state="present"
+- name: Set fact java_state to present
+  ansible.builtin.set_fact:
+    java_state: "present"
 
-- name: set fact java_state to latest
-  set_fact: java_state="latest"
-  when: update_java == true
+- name: Set fact java_state to latest
+  ansible.builtin.set_fact:
+    java_state: "latest"
+  when: (update_java | lower) == 'true'
 
 - name: RedHat - Ensure Java is installed
-  become: yes
-  yum: name={{ java }} state={{java_state}}
+  become: true
+  ansible.builtin.yum:
+    name: "{{ java }}"
+    state: "{{ java_state }}"
   when: ansible_os_family == 'RedHat'
 
 - name: Get the installed java path
-  shell: "update-alternatives --display java | grep '^/' | awk '{print $1}' | grep 1.8.0-openjdk | head -1"
-  become: yes
+  ansible.builtin.shell: "update-alternatives --display java | grep '^/' | awk '{print $1}' | grep 1.8.0-openjdk | head -1"
+  become: true
   register: java_full_path
-  failed_when: False
-  changed_when: False
-  check_mode: no
+  failed_when: false
+  changed_when: false
+  check_mode: false
   when: ansible_os_family == 'RedHat'
 
-- name: correct java version selected
-  alternatives:
+- name: Correct java version selected
+  community.general.alternatives:
     name: java
     path: "{{ java_full_path.stdout }}"
     link: /usr/bin/java
   when: ansible_os_family == 'RedHat' and java_full_path is defined
 
 - name: Refresh java repo
-  become: yes
-  apt: update_cache=yes
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
   changed_when: false
   when: ansible_os_family == 'Debian'
 
 - name: Debian - Ensure Java is installed
-  become: yes
-  apt: name={{ java }} state={{java_state}}
+  become: true
+  ansible.builtin.apt:
+    name: "{{ java }}"
+    state: "{{ java_state }}"
   when: ansible_os_family == 'Debian'
 
-- name: register open_jdk version
-  shell: java -version 2>&1 | grep OpenJDK
+- name: Register open_jdk version
+  ansible.builtin.shell: java -version 2>&1 | grep OpenJDK
   register: open_jdk
-  ignore_errors: yes
+  ignore_errors: true
   changed_when: false
-  check_mode: no
+  check_mode: false
 
-#https://github.com/docker-library/openjdk/issues/19 - ensures tests pass due to java 8 broken certs
-- name: refresh the java ca-certificates
-  become: yes
-  command: /var/lib/dpkg/info/ca-certificates-java.postinst configure
+# https://github.com/docker-library/openjdk/issues/19 - ensures tests pass due to java 8 broken certs
+- name: Refresh the java ca-certificates
+  become: true
+  ansible.builtin.command: /var/lib/dpkg/info/ca-certificates-java.postinst configure
   when: ansible_distribution == 'Ubuntu' and open_jdk.rc == 0
   changed_when: false

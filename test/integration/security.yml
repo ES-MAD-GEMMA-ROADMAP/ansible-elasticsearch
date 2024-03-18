@@ -23,7 +23,7 @@
     es_ssl_truststore_password: password2
     es_validate_certs: no
     es_users:
-      file:
+      ansible.builtin.file:
         es_admin:
           password: changeMe
           roles:
@@ -34,7 +34,7 @@
             - power_user
             - user
     es_roles:
-      file:
+      ansible.builtin.file:
         admin:
           cluster:
             - all

@@ -1,14 +1,15 @@
-
-- name: reload systemd configuration
-  become: yes
-  systemd:
+- name: Reload systemd configuration
+  become: true
+  ansible.builtin.systemd:
     daemon_reload: true
 
 # Restart service and ensure it is enabled
-
-- name: restart elasticsearch
-  become: yes
-  service: name=elasticsearch state=restarted enabled=yes
+- name: Restart elasticsearch
+  become: true
+  ansible.builtin.service:
+    name: elasticsearch
+    state: restarted
+    enabled: true
   when:
     - es_restart_on_change
     - es_start_service

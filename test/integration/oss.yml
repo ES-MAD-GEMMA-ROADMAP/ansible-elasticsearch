@@ -8,4 +8,4 @@
   vars:
     oss_version: true
 
-#Do not add tests here. This test is run twice and confirms idempotency.
+# Do not add tests here. This test is run twice and confirms idempotency.

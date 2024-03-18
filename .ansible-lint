@@ -1,0 +1,15 @@
+exclude_paths:
+  - .ci/
+  - .github/
+  - .kitchen.yml
+  - test/
+
+
+warn_list:
+  - command-instead-of-module
+  - command-instead-of-shell
+  - ignore-errors
+  - line-length
+  - no-changed-when
+  - risky-shell-pipe
+  - yaml[line-length]

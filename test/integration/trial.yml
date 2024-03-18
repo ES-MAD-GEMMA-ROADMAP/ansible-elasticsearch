@@ -39,14 +39,14 @@
           roles:
             - kibana4_server
         logstash_system:
-          #this should be successfully modified
+          # this should be successfully modified
           password: aNewLogstashPassword
-          #this will be ignored
+          # this will be ignored
           roles:
             - kibana4_server
         elastic:
           password: elasticChanged
-      file:
+      ansible.builtin.file:
         es_admin:
           password: changeMe
           roles:
@@ -57,7 +57,7 @@
             - power_user
             - user
     es_roles:
-      file:
+      ansible.builtin.file:
         admin:
           cluster:
             - all
@@ -94,7 +94,7 @@
                 - write
                 - delete
                 - create_index
-        #this will be ignored - its reserved
+        # this will be ignored - its reserved
         logstash_system:
           cluster:
             - manage_index_templates
