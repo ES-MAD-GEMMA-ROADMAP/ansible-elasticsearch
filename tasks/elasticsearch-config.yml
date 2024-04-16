@@ -45,7 +45,7 @@
     mode: "660"
     force: true
   register: system_change
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
 
 # Copy the default file
 - name: Copy Default File
@@ -57,7 +57,7 @@
     group: "{{ es_group }}"
     mode: "660"
     force: true
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
 
 # Copy the systemd specific file if systemd is installed
 - name: Copy the systemd specific file if systemd is installed
@@ -79,8 +79,8 @@
         mode: "644"
         force: true
       notify:
-        - reload systemd configuration
-        - restart elasticsearch
+        - Reload systemd configuration
+        - Restart elasticsearch
 
 - name: Copy jvm.options File
   become: true
@@ -91,7 +91,7 @@
     group: "{{ es_group }}"
     mode: "660"
     force: true
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
 
 - name: Copy log4j2.properties File
   become: true
@@ -102,5 +102,5 @@
     group: "{{ es_group }}"
     mode: "660"
     force: true
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
   when: es_config_log4j2 != ''

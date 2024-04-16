@@ -28,7 +28,7 @@
     group: "{{ es_group }}"
     mode: "640"
   when: es_ssl_upload and es_ssl_keystore and es_ssl_truststore
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
   register: copy_keystore
 
 - name: Upload SSL/TLS truststore
@@ -40,7 +40,7 @@
     group: "{{ es_group }}"
     mode: "640"
   when: es_ssl_upload and es_ssl_keystore and es_ssl_truststore
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
   register: copy_truststore
 
 - name: Upload SSL/TLS key and certificate
@@ -56,7 +56,7 @@
     - "{{ es_ssl_certificate }}"
   when: es_ssl_upload and es_ssl_key and es_ssl_certificate
   # Restart if these change
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
   register: copy_certificates
 
 - name: Upload SSL Certificate Authority
@@ -68,7 +68,7 @@
     group: "{{ es_group }}"
     mode: "640"
   # Restart if this changes
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
   when: es_ssl_upload and (es_ssl_certificate_authority is defined) and (es_ssl_certificate_authority|length > 0)
 
 - name: Set keystore password
